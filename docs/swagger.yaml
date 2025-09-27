@@ -1,0 +1,1534 @@
+basePath: /api
+definitions:
+  dto.AuthResponse:
+    properties:
+      token:
+        description: |-
+          JWT authentication token
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+    type: object
+  dto.BookerRequest:
+    properties:
+      email:
+        description: |-
+          Booker's email address
+          required: true
+          example: john.doe@example.com
+        type: string
+      full_name:
+        description: |-
+          Booker's full name
+          required: true
+          example: John Doe
+        type: string
+      phone_number:
+        description: |-
+          Booker's phone number
+          required: true
+          example: 081234567890
+        type: string
+    required:
+    - email
+    - full_name
+    - phone_number
+    type: object
+  dto.BookingResponse:
+    properties:
+      booking_code:
+        description: |-
+          Unique booking code
+          example: KAI-20240115-001
+        type: string
+      id:
+        description: |-
+          Booking unique identifier
+          example: 507f1f77bcf86cd799439015
+        type: string
+      passengers:
+        description: List of passengers
+        items:
+          $ref: '#/definitions/dto.PassengerRequest'
+        type: array
+      payment_expiry:
+        description: |-
+          Payment expiry time in YYYY-MM-DD HH:MM format
+          example: 2024-01-15 12:00
+        type: string
+      schedule:
+        allOf:
+        - $ref: '#/definitions/dto.ScheduleResponse'
+        description: Schedule information
+      status:
+        description: |-
+          Booking status
+          example: pending
+        type: string
+      total_price:
+        description: |-
+          Total price for all passengers
+          example: 300000
+        type: number
+    type: object
+  dto.CarriageDTO:
+    properties:
+      code:
+        description: |-
+          Carriage code (e.g., CAR1, CAR2)
+          required: true
+          example: CAR1
+        type: string
+      seats:
+        description: |-
+          List of seats in this carriage
+          required: true
+        items:
+          $ref: '#/definitions/dto.SeatDTO'
+        type: array
+    required:
+    - code
+    - seats
+    type: object
+  dto.CarriageLayoutDTO:
+    properties:
+      code:
+        description: |-
+          Carriage code
+          example: CAR1
+        type: string
+      seats:
+        description: List of seats with their availability
+        items:
+          $ref: '#/definitions/dto.SeatAvailabilityDTO'
+        type: array
+    type: object
+  dto.CreateBookingRequest:
+    properties:
+      booker:
+        allOf:
+        - $ref: '#/definitions/dto.BookerRequest'
+        description: |-
+          Booker information
+          required: true
+      passengers:
+        description: |-
+          List of passengers (minimum 1)
+          required: true
+        items:
+          $ref: '#/definitions/dto.PassengerRequest'
+        minItems: 1
+        type: array
+      schedule_id:
+        description: |-
+          Schedule ID for the booking
+          required: true
+          example: 507f1f77bcf86cd799439014
+        type: string
+    required:
+    - booker
+    - passengers
+    - schedule_id
+    type: object
+  dto.CreateScheduleRequest:
+    properties:
+      arrival_time:
+        description: |-
+          Arrival time in YYYY-MM-DD HH:MM format
+          required: true
+          example: 2024-01-15 16:45
+        type: string
+      available_seats:
+        description: |-
+          Number of available seats
+          required: true
+          minimum: 0
+          example: 50
+        minimum: 0
+        type: integer
+      departure_time:
+        description: |-
+          Departure time in YYYY-MM-DD HH:MM format
+          required: true
+          example: 2024-01-15 08:30
+        type: string
+      destination_station_id:
+        description: |-
+          Destination station ID
+          required: true
+          example: 507f1f77bcf86cd799439012
+        type: string
+      origin_station_id:
+        description: |-
+          Origin station ID
+          required: true
+          example: 507f1f77bcf86cd799439011
+        type: string
+      price:
+        description: |-
+          Ticket price
+          required: true
+          minimum: 0
+          example: 150000
+        type: number
+      train_id:
+        description: |-
+          Train ID
+          required: true
+          example: 507f1f77bcf86cd799439013
+        type: string
+    required:
+    - arrival_time
+    - available_seats
+    - departure_time
+    - destination_station_id
+    - origin_station_id
+    - price
+    - train_id
+    type: object
+  dto.CreateTrainRequest:
+    properties:
+      carriages:
+        description: |-
+          List of carriages with their seats
+          required: true
+        items:
+          $ref: '#/definitions/dto.CarriageDTO'
+        type: array
+      class:
+        description: |-
+          Train class (e.g., Executive, Business, Economy)
+          required: true
+          example: Executive
+        type: string
+      name:
+        description: |-
+          Train name
+          required: true
+          example: Argo Bromo Anggrek
+        type: string
+    required:
+    - carriages
+    - class
+    - name
+    type: object
+  dto.LoginRequest:
+    properties:
+      email:
+        description: |-
+          User's email address
+          required: true
+          example: john.doe@example.com
+        type: string
+      password:
+        description: |-
+          User's password
+          required: true
+          example: password123
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  dto.PassengerRequest:
+    properties:
+      full_name:
+        description: |-
+          Passenger's full name
+          required: true
+          example: Jane Doe
+        type: string
+      identity_number:
+        description: |-
+          Passenger's identity number (exactly 16 characters)
+          required: true
+          example: 1234567890123456
+        maxLength: 16
+        minLength: 16
+        type: string
+      seat_code:
+        description: |-
+          Seat code assigned to the passenger
+          required: true
+          example: EKO-6 / 9A
+        type: string
+    required:
+    - full_name
+    - identity_number
+    - seat_code
+    type: object
+  dto.RegisterRequest:
+    properties:
+      confirm_password:
+        description: |-
+          Password confirmation (must match password)
+          required: true
+          example: password123
+        type: string
+      email:
+        description: |-
+          User's email address
+          required: true
+          example: john.doe@example.com
+        type: string
+      full_name:
+        description: |-
+          User's full name (minimum 3 characters)
+          required: true
+          example: John Doe
+        minLength: 3
+        type: string
+      identity_number:
+        description: |-
+          User's identity number (exactly 16 characters)
+          required: true
+          example: 1234567890123456
+        maxLength: 16
+        minLength: 16
+        type: string
+      password:
+        description: |-
+          User's password (minimum 6 characters)
+          required: true
+          example: password123
+        minLength: 6
+        type: string
+      phone_number:
+        description: |-
+          User's phone number (minimum 10 characters)
+          required: true
+          example: 081234567890
+        minLength: 10
+        type: string
+    required:
+    - confirm_password
+    - email
+    - full_name
+    - identity_number
+    - password
+    - phone_number
+    type: object
+  dto.Response-any:
+    properties:
+      code:
+        description: |-
+          HTTP status code
+          example: 200
+        type: integer
+      data:
+        description: Response data
+      message:
+        description: |-
+          Response message
+          example: Success
+        type: string
+    type: object
+  dto.Response-array_dto_BookingResponse:
+    properties:
+      code:
+        description: |-
+          HTTP status code
+          example: 200
+        type: integer
+      data:
+        description: Response data
+        items:
+          $ref: '#/definitions/dto.BookingResponse'
+        type: array
+      message:
+        description: |-
+          Response message
+          example: Success
+        type: string
+    type: object
+  dto.Response-array_dto_CarriageLayoutDTO:
+    properties:
+      code:
+        description: |-
+          HTTP status code
+          example: 200
+        type: integer
+      data:
+        description: Response data
+        items:
+          $ref: '#/definitions/dto.CarriageLayoutDTO'
+        type: array
+      message:
+        description: |-
+          Response message
+          example: Success
+        type: string
+    type: object
+  dto.Response-array_dto_ScheduleResponse:
+    properties:
+      code:
+        description: |-
+          HTTP status code
+          example: 200
+        type: integer
+      data:
+        description: Response data
+        items:
+          $ref: '#/definitions/dto.ScheduleResponse'
+        type: array
+      message:
+        description: |-
+          Response message
+          example: Success
+        type: string
+    type: object
+  dto.Response-array_dto_StationResponse:
+    properties:
+      code:
+        description: |-
+          HTTP status code
+          example: 200
+        type: integer
+      data:
+        description: Response data
+        items:
+          $ref: '#/definitions/dto.StationResponse'
+        type: array
+      message:
+        description: |-
+          Response message
+          example: Success
+        type: string
+    type: object
+  dto.Response-array_dto_TrainResponse:
+    properties:
+      code:
+        description: |-
+          HTTP status code
+          example: 200
+        type: integer
+      data:
+        description: Response data
+        items:
+          $ref: '#/definitions/dto.TrainResponse'
+        type: array
+      message:
+        description: |-
+          Response message
+          example: Success
+        type: string
+    type: object
+  dto.Response-dto_AuthResponse:
+    properties:
+      code:
+        description: |-
+          HTTP status code
+          example: 200
+        type: integer
+      data:
+        allOf:
+        - $ref: '#/definitions/dto.AuthResponse'
+        description: Response data
+      message:
+        description: |-
+          Response message
+          example: Success
+        type: string
+    type: object
+  dto.Response-dto_BookingResponse:
+    properties:
+      code:
+        description: |-
+          HTTP status code
+          example: 200
+        type: integer
+      data:
+        allOf:
+        - $ref: '#/definitions/dto.BookingResponse'
+        description: Response data
+      message:
+        description: |-
+          Response message
+          example: Success
+        type: string
+    type: object
+  dto.Response-dto_ScheduleResponse:
+    properties:
+      code:
+        description: |-
+          HTTP status code
+          example: 200
+        type: integer
+      data:
+        allOf:
+        - $ref: '#/definitions/dto.ScheduleResponse'
+        description: Response data
+      message:
+        description: |-
+          Response message
+          example: Success
+        type: string
+    type: object
+  dto.Response-dto_StationResponse:
+    properties:
+      code:
+        description: |-
+          HTTP status code
+          example: 200
+        type: integer
+      data:
+        allOf:
+        - $ref: '#/definitions/dto.StationResponse'
+        description: Response data
+      message:
+        description: |-
+          Response message
+          example: Success
+        type: string
+    type: object
+  dto.Response-dto_TrainResponse:
+    properties:
+      code:
+        description: |-
+          HTTP status code
+          example: 200
+        type: integer
+      data:
+        allOf:
+        - $ref: '#/definitions/dto.TrainResponse'
+        description: Response data
+      message:
+        description: |-
+          Response message
+          example: Success
+        type: string
+    type: object
+  dto.ScheduleResponse:
+    properties:
+      arrival_time:
+        description: |-
+          Arrival time in YYYY-MM-DD HH:MM format
+          example: 2024-01-15 16:45
+        type: string
+      available_seats:
+        description: |-
+          Number of available seats
+          example: 25
+        type: integer
+      departure_time:
+        description: |-
+          Departure time in YYYY-MM-DD HH:MM format
+          example: 2024-01-15 08:30
+        type: string
+      destination_station:
+        allOf:
+        - $ref: '#/definitions/dto.StationResponse'
+        description: Destination station information
+      duration:
+        description: |-
+          Journey duration (e.g., "8h 15m")
+          example: 8h 15m
+        type: string
+      id:
+        description: |-
+          Schedule unique identifier
+          example: 507f1f77bcf86cd799439014
+        type: string
+      origin_station:
+        allOf:
+        - $ref: '#/definitions/dto.StationResponse'
+        description: Origin station information
+      price:
+        description: |-
+          Ticket price
+          example: 150000
+        type: number
+      train:
+        allOf:
+        - $ref: '#/definitions/dto.TrainInScheduleResponse'
+        description: Train information
+    type: object
+  dto.SearchScheduleRequest:
+    properties:
+      departure_date:
+        description: |-
+          Departure date in YYYY-MM-DD format
+          required: true
+          example: 2024-01-15
+        type: string
+      destination_station_id:
+        description: |-
+          Destination station ID
+          required: true
+          example: 507f1f77bcf86cd799439012
+        type: string
+      origin_station_id:
+        description: |-
+          Origin station ID
+          required: true
+          example: 507f1f77bcf86cd799439011
+        type: string
+      passengers:
+        description: |-
+          Number of passengers
+          required: true
+          minimum: 1
+          example: 2
+        minimum: 1
+        type: integer
+    required:
+    - departure_date
+    - destination_station_id
+    - origin_station_id
+    - passengers
+    type: object
+  dto.SeatAvailabilityDTO:
+    properties:
+      code:
+        description: |-
+          Seat code (e.g., A1, B2)
+          example: A1
+        type: string
+      is_available:
+        description: |-
+          Whether the seat is available for booking
+          example: true
+        type: boolean
+    type: object
+  dto.SeatDTO:
+    properties:
+      code:
+        description: |-
+          Seat code (e.g., A1, B2)
+          required: true
+          example: A1
+        type: string
+      is_available:
+        description: |-
+          Whether the seat is available for booking
+          example: true
+        type: boolean
+    required:
+    - code
+    type: object
+  dto.StationRequest:
+    properties:
+      city:
+        description: |-
+          City where the station is located
+          required: true
+          example: Jakarta
+        type: string
+      code:
+        description: |-
+          Station code (2-4 characters)
+          required: true
+          example: GMB
+        maxLength: 4
+        minLength: 2
+        type: string
+      name:
+        description: |-
+          Station name
+          required: true
+          example: Gambir Station
+        type: string
+    required:
+    - city
+    - code
+    - name
+    type: object
+  dto.StationResponse:
+    properties:
+      city:
+        description: |-
+          City where the station is located
+          example: Jakarta
+        type: string
+      code:
+        description: |-
+          Station code
+          example: GMB
+        type: string
+      id:
+        description: |-
+          Station unique identifier
+          example: 507f1f77bcf86cd799439011
+        type: string
+      name:
+        description: |-
+          Station name
+          example: Gambir Station
+        type: string
+    type: object
+  dto.TrainInScheduleResponse:
+    properties:
+      class:
+        description: |-
+          Train class
+          example: Executive
+        type: string
+      name:
+        description: |-
+          Train name
+          example: Argo Bromo Anggrek
+        type: string
+    type: object
+  dto.TrainResponse:
+    properties:
+      carriages:
+        description: List of carriages with their seats
+        items:
+          $ref: '#/definitions/dto.CarriageDTO'
+        type: array
+      class:
+        description: |-
+          Train class
+          example: Executive
+        type: string
+      id:
+        description: |-
+          Train unique identifier
+          example: 507f1f77bcf86cd799439011
+        type: string
+      name:
+        description: |-
+          Train name
+          example: Argo Bromo Anggrek
+        type: string
+    type: object
+  dto.UpdateBookingStatusRequest:
+    properties:
+      status:
+        description: |-
+          New booking status (e.g., "confirmed", "paid", "cancelled")
+          required: true
+          example: paid
+        type: string
+    required:
+    - status
+    type: object
+  dto.UpdateScheduleRequest:
+    properties:
+      arrival_time:
+        description: |-
+          Arrival time in YYYY-MM-DD HH:MM format
+          required: true
+          example: 2024-01-15 16:45
+        type: string
+      available_seats:
+        description: |-
+          Number of available seats
+          required: true
+          minimum: 0
+          example: 50
+        minimum: 0
+        type: integer
+      departure_time:
+        description: |-
+          Departure time in YYYY-MM-DD HH:MM format
+          required: true
+          example: 2024-01-15 08:30
+        type: string
+      price:
+        description: |-
+          Ticket price
+          required: true
+          minimum: 0
+          example: 150000
+        type: number
+    required:
+    - arrival_time
+    - available_seats
+    - departure_time
+    - price
+    type: object
+  dto.UpdateTrainRequest:
+    properties:
+      carriages:
+        description: |-
+          List of carriages with their seats
+          required: true
+        items:
+          $ref: '#/definitions/dto.CarriageDTO'
+        type: array
+      class:
+        description: |-
+          Train class (e.g., Executive, Business, Economy)
+          required: true
+          example: Executive
+        type: string
+      name:
+        description: |-
+          Train name
+          required: true
+          example: Argo Bromo Anggrek
+        type: string
+    required:
+    - carriages
+    - class
+    - name
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: fernandolouis55@gmail.com
+    name: Louis Fernando
+  description: |-
+    This is a comprehensive REST API for Indonesian Railway (KAI) ticket booking system.
+    The API provides endpoints for user authentication, station management, train management, schedule search, and booking operations.
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/MIT
+  title: KAI Backend
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user and return JWT token
+      parameters:
+      - description: User login credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful
+          schema:
+            $ref: '#/definitions/dto.Response-dto_AuthResponse'
+        "400":
+          description: Bad request - validation failed
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "401":
+          description: Unauthorized - invalid credentials
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      summary: User login
+      tags:
+      - Authentication
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user account with the provided information
+      parameters:
+      - description: User registration data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User registered successfully
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "400":
+          description: Bad request - validation failed
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      summary: Register a new user
+      tags:
+      - Authentication
+  /bookings:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all bookings belonging to the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Bookings retrieved successfully
+          schema:
+            $ref: '#/definitions/dto.Response-array_dto_BookingResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      security:
+      - Bearer: []
+      summary: Get my bookings
+      tags:
+      - Bookings
+    post:
+      consumes:
+      - application/json
+      description: Create a new train ticket booking for authenticated user
+      parameters:
+      - description: Booking data
+        in: body
+        name: booking
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateBookingRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Booking created successfully
+          schema:
+            $ref: '#/definitions/dto.Response-dto_BookingResponse'
+        "400":
+          description: Bad request - validation failed
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      security:
+      - Bearer: []
+      summary: Create a new booking
+      tags:
+      - Bookings
+  /bookings/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific booking by its ID
+      parameters:
+      - description: Booking ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Booking retrieved successfully
+          schema:
+            $ref: '#/definitions/dto.Response-dto_BookingResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      security:
+      - Bearer: []
+      summary: Get booking by ID
+      tags:
+      - Bookings
+  /bookings/{id}/cancel:
+    post:
+      consumes:
+      - application/json
+      description: Cancel an existing booking
+      parameters:
+      - description: Booking ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Booking cancelled successfully
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      security:
+      - Bearer: []
+      summary: Cancel booking
+      tags:
+      - Bookings
+  /bookings/{id}/status:
+    patch:
+      consumes:
+      - application/json
+      description: Update the status of a booking (e.g., after payment)
+      parameters:
+      - description: Booking ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: New status data
+        in: body
+        name: status
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateBookingStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Booking status updated successfully
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "400":
+          description: Bad request - validation failed
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      security:
+      - Bearer: []
+      summary: Update booking status
+      tags:
+      - Bookings
+  /schedules:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all train schedules for admin management
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: All schedules retrieved successfully
+          schema:
+            $ref: '#/definitions/dto.Response-array_dto_ScheduleResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      security:
+      - Bearer: []
+      summary: Get all schedules (Admin only)
+      tags:
+      - Schedules
+    post:
+      consumes:
+      - application/json
+      description: Create a new train schedule (Admin only)
+      parameters:
+      - description: Schedule data
+        in: body
+        name: schedule
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateScheduleRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Schedule created successfully
+          schema:
+            $ref: '#/definitions/dto.Response-dto_ScheduleResponse'
+        "400":
+          description: Bad request - validation failed
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      security:
+      - Bearer: []
+      summary: Create a new schedule
+      tags:
+      - Schedules
+  /schedules/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a train schedule (Admin only)
+      parameters:
+      - description: Schedule ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Schedule deleted successfully
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      security:
+      - Bearer: []
+      summary: Delete schedule
+      tags:
+      - Schedules
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific train schedule by its ID
+      parameters:
+      - description: Schedule ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Schedule retrieved successfully
+          schema:
+            $ref: '#/definitions/dto.Response-dto_ScheduleResponse'
+        "404":
+          description: Schedule not found
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      summary: Get schedule by ID
+      tags:
+      - Schedules
+    put:
+      consumes:
+      - application/json
+      description: Update an existing train schedule (Admin only)
+      parameters:
+      - description: Schedule ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated schedule data
+        in: body
+        name: schedule
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateScheduleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Schedule updated successfully
+          schema:
+            $ref: '#/definitions/dto.Response-dto_ScheduleResponse'
+        "400":
+          description: Bad request - validation failed
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      security:
+      - Bearer: []
+      summary: Update schedule
+      tags:
+      - Schedules
+  /schedules/{id}/seats:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve the seat layout for a specific schedule
+      parameters:
+      - description: Schedule ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Seat layout retrieved successfully
+          schema:
+            $ref: '#/definitions/dto.Response-array_dto_CarriageLayoutDTO'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      summary: Get seat layout
+      tags:
+      - Schedules
+  /schedules/search:
+    post:
+      consumes:
+      - application/json
+      description: Search train schedules by origin, destination, date, and passenger
+        count
+      parameters:
+      - description: Schedule data
+        in: body
+        name: schedule
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SearchScheduleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Schedules retrieved successfully
+          schema:
+            $ref: '#/definitions/dto.Response-array_dto_ScheduleResponse'
+        "400":
+          description: Bad request - validation failed
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      summary: Search schedules
+      tags:
+      - Schedules
+  /stations:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all railway stations
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Stations retrieved successfully
+          schema:
+            $ref: '#/definitions/dto.Response-array_dto_StationResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      summary: Get all stations
+      tags:
+      - Stations
+    post:
+      consumes:
+      - application/json
+      description: Create a new railway station (Admin only)
+      parameters:
+      - description: Station data
+        in: body
+        name: station
+        required: true
+        schema:
+          $ref: '#/definitions/dto.StationRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Station created successfully
+          schema:
+            $ref: '#/definitions/dto.Response-dto_StationResponse'
+        "400":
+          description: Bad request - validation failed
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      security:
+      - Bearer: []
+      summary: Create a new station
+      tags:
+      - Stations
+  /stations/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a railway station (Admin only)
+      parameters:
+      - description: Station ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Station deleted successfully
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      security:
+      - Bearer: []
+      summary: Delete station
+      tags:
+      - Stations
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific station by its ID
+      parameters:
+      - description: Station ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Station retrieved successfully
+          schema:
+            $ref: '#/definitions/dto.Response-dto_StationResponse'
+        "404":
+          description: Station not found
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      summary: Get station by ID
+      tags:
+      - Stations
+    put:
+      consumes:
+      - application/json
+      description: Update an existing railway station (Admin only)
+      parameters:
+      - description: Station ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated station data
+        in: body
+        name: station
+        required: true
+        schema:
+          $ref: '#/definitions/dto.StationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Station updated successfully
+          schema:
+            $ref: '#/definitions/dto.Response-dto_StationResponse'
+        "400":
+          description: Bad request - validation failed
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      security:
+      - Bearer: []
+      summary: Update station
+      tags:
+      - Stations
+  /trains:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all trains
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Trains retrieved successfully
+          schema:
+            $ref: '#/definitions/dto.Response-array_dto_TrainResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      summary: Get all trains
+      tags:
+      - Trains
+    post:
+      consumes:
+      - application/json
+      description: Create a new train with carriages and seats (Admin only)
+      parameters:
+      - description: Train data
+        in: body
+        name: train
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateTrainRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Train created successfully
+          schema:
+            $ref: '#/definitions/dto.Response-dto_TrainResponse'
+        "400":
+          description: Bad request - validation failed
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      security:
+      - Bearer: []
+      summary: Create a new train
+      tags:
+      - Trains
+  /trains/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a train (Admin only)
+      parameters:
+      - description: Train ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Train deleted successfully
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      security:
+      - Bearer: []
+      summary: Delete train
+      tags:
+      - Trains
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a specific train by its ID
+      parameters:
+      - description: Train ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Train retrieved successfully
+          schema:
+            $ref: '#/definitions/dto.Response-dto_TrainResponse'
+        "404":
+          description: Train not found
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      summary: Get train by ID
+      tags:
+      - Trains
+    put:
+      consumes:
+      - application/json
+      description: Update an existing train (Admin only)
+      parameters:
+      - description: Train ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated train data
+        in: body
+        name: train
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateTrainRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Train updated successfully
+          schema:
+            $ref: '#/definitions/dto.Response-dto_TrainResponse'
+        "400":
+          description: Bad request - validation failed
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.Response-any'
+      security:
+      - Bearer: []
+      summary: Update train
+      tags:
+      - Trains
+schemes:
+- http
+- https
+securityDefinitions:
+  Bearer:
+    description: 'JWT Authorization header using the Bearer scheme. Example: "Authorization:
+      Bearer {token}"'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
